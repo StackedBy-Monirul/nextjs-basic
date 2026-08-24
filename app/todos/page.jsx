@@ -1,10 +1,21 @@
+'use client'
+
 import Link from 'next/link';
 import DeleteTodo from '../components/DeleteTodo'
-import { Suspense } from 'react';
-import { getTodos } from '../lib/todos';
+import { useEffect, useState } from 'react';
 
-const TodoPage = async () => {
-    const data = getTodos();
+const TodoPage = () => {
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        fetch('/api/todos')
+            .then(response => response.json())
+            .then(setData)
+    }, [])
+
+    const removeTodo = (id) => {
+        setData(currentTodos => currentTodos.filter(todo => todo.id !== id))
+    }
 
     return (
         <section className="mt-24 w-full h-full flex justify-center">
@@ -22,9 +33,7 @@ const TodoPage = async () => {
                             <td className="border border-gray-300 px-4 py-2"><Link href={`/todos/${todo.id}`}>{todo.id}</Link></td>
                             <td className="border border-gray-300 px-4 py-2">{todo.title}</td>
                             <td className="border border-gray-300 px-4 py-2">
-                                <Suspense fallback={<div>Loading...</div>}>
-                                    <DeleteTodo id={todo.id} />
-                                </Suspense>
+                                <DeleteTodo id={todo.id} onDeleted={removeTodo} />
                             </td>
                         </tr>
                     ))}

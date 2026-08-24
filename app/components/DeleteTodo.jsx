@@ -1,9 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-
-const DeleteTodo = ({ id }) => {
-    const router = useRouter()
+const DeleteTodo = ({ id, onDeleted }) => {
 
     const handleDelete = async () => {
         const response = await fetch('/api/todos', {
@@ -13,7 +10,7 @@ const DeleteTodo = ({ id }) => {
         })
 
         if (response.ok) {
-            router.refresh()
+            onDeleted(id)
         }
         else {
             throw new Error('Failed to delete todo')
