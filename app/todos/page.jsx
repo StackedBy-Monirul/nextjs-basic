@@ -1,14 +1,10 @@
 import Link from 'next/link';
 import DeleteTodo from '../components/DeleteTodo'
 import { Suspense } from 'react';
+import { getTodos } from '../lib/todos';
 
 const TodoPage = async () => {
-
-    const dummyWait = new Promise((resolve) => setTimeout(resolve, 1000));
-    const response = await fetch('http://localhost:3000/api/todos', {
-        cache: 'no-store'
-    })
-    const data = await response.json();
+    const data = getTodos();
 
     return (
         <section className="mt-24 w-full h-full flex justify-center">

@@ -1,11 +1,9 @@
 import { notFound } from 'next/navigation'
+import { getTodos } from '../../lib/todos';
 
 const TodoPage = async ({ params }) => {
     const { id } = await params;
-    const response = await fetch('http://localhost:3000/api/todos', {
-        cache: 'no-store'
-    })
-    const todos = await response.json()
+    const todos = getTodos()
     const todo = todos.find((item) => item.id === Number(id))
 
     if (!todo) {
